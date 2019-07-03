@@ -1,8 +1,7 @@
-
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <title>Administrator Page</title>
+    <title>Integrated Management System &mdash; IMS</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
@@ -40,16 +39,75 @@
       <div class="site-mobile-menu-body"></div>
     </div>
 
+
+    <header class="site-navbar py-4 js-sticky-header site-navbar-target" role="banner">
+
+      <div class="container-fluid">
+        <div class="d-flex align-items-center">
+          <div class="site-logo mr-auto w-25"><a href="">IMS Portal</a></div>
+
+<!--
+          <div class="ml-auto w-25">
+            <nav class="site-navigation position-relative text-right" role="navigation">
+              <ul class="site-menu main-menu site-menu-dark js-clone-nav mr-auto d-none d-lg-block m-0 p-0">
+                  <small style="color:white;">Haven't registered?</small>
+                <li class="cta"><a href="register.html" class="nav-link"><span>Register</span></a></li>
+              </ul>
+            </nav>
+            <a href="#" class="d-inline-block d-lg-none site-menu-toggle js-menu-toggle text-black float-right"><span class="icon-menu h3"></span></a>
+          </div>
+-->
+        </div>
+      </div>
+
+    </header>
+
     <div class="intro-section" id="home-section">
 
-      <div class="slide-1" style="background-image: url('images/Log.jpg');" data-stellar-background-ratio="0.5">
+      <div class="slide-1" style="background-image: url('images/mountain.jpg');" data-stellar-background-ratio="0.5">
         <div class="container">
-          <div class="row align-items-top">
+          <div class="row align-items-center">
             <div class="col-12">
-              <div class="row align-items-top">
-                <div class="col-lg-6">
+              <div class="row align-items-center">
+                <div class="col-lg-6 mb-4">
                   <h1  data-aos="fade-up" data-aos-delay="100">Administrator Page</h1>
-                  <p class="mb-4"  data-aos="fade-up" data-aos-delay="200">List of departments</p>
+                  <p class="mb-4"  data-aos="fade-up" data-aos-delay="200">List of Departments</p>
+
+                </div>
+
+                <div class="table-responsive">
+                	<table class="table table-hover table-dark">
+                		<thead class="thead-light">
+                			<tr>
+                				<th scope="col">Department Number</th>
+                				<th scope="col">Department Name</th>
+                				<th scope="col">Link</th>
+                			</tr>                			
+                		</thead>
+                		<tbody>
+                			<?php
+
+								$con=mysqli_connect("localhost","root","Orion@1234","project2");
+								$query=mysqli_query($con,"SELECT * FROM department");
+								$numrows=mysqli_num_rows($query);
+								if($numrows>0)
+								{
+									while($row=mysqli_fetch_assoc($query))
+									{
+										echo "<td>".$row['deptno']."</td>";
+										echo "<td>".$row['deptname']."</td>";
+										$deptno=$row['deptno'];
+										echo "<td><a href='hod.php?deptno=$deptno'>'".$row['deptname']."'</a></td>";
+										echo "</tr>";
+									}
+								}
+								else
+								{
+									echo "No departments";
+								}
+							?>
+                		</tbody>                		
+                	</table>
                 </div>
               </div>
             </div>
@@ -58,43 +116,9 @@
         </div>
       </div>
     </div>
-</div>
-  <div class="table-responsive">
-    <table class="table table-hover">
-      <thead class="thead=dark">
-        <tr>
-          <th scope="col">Department Number</th>
-          <th scope="col">Department Name</th>
-          <th scope="col">Link</th>
-        </tr>
-      </thead>
-      <tbody>
-      	<tr>
-        <?php
 
-			$con=mysqli_connect("localhost","root","Orion@1234","project2");
-			$query=mysqli_query($con,"SELECT * FROM department");
-			$numrows=mysqli_num_rows($query);
-			if($numrows>0)
-			{
-				while($row=mysqli_fetch_assoc($query))
-				{
-					$deptname=$row['deptname'];
-					echo "<td>".$row['deptno']."</td>";
-					echo "<td>".$row['deptname']."<td>";
-					$_SESSION['sess_deptname']=$deptname;
-					echo "<td><a href='hod.php'>'".$row['deptname']."'</a></td>";
-					echo "</tr>";
-				}
-			}
-			else
-			{
-				echo "No departments";
-			}
-		?>
-      </tbody>
-    </table>
-  </div>
+
+</div>
 
   <script src="js/jquery-3.3.1.min.js"></script>
   <script src="js/jquery-migrate-3.0.1.min.js"></script>
