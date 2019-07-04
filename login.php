@@ -33,8 +33,6 @@ function test_input($data) {
     }
     $query=mysqli_query($con,"SELECT * FROM user WHERE username='".$userid."' AND pwd='".$pwd."'");
     $numrows=mysqli_num_rows($query);
-    echo $userid;
-    echo $pwd;
     if($numrows==1)
     {
         while($row=mysqli_fetch_assoc($query))
