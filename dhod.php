@@ -1,77 +1,3 @@
-<?php
-session_start();
-function test_input($data) {
-  $data = trim($data);
-  $data = stripslashes($data);
-  $data = htmlspecialchars($data);
-  return $data;
-}
-  $error="";
-  $userid="";
-  $pwd="";
-  $con=mysqli_connect('localhost','root','Orion@1234','project2') or die(mysqli_error());
-  if ($_POST["SUBMIT"])
-  {
-    if (!$_POST["userid"]) 
-    {       
-        $error .= "A username is required.<br>";
-        echo $error;
-    }
-    else
-    {
-      $userid=$_POST['userid'];
-    }
-    if (!$_POST["pwd"]) 
-    {   
-       $error .= "A password is required.<br>";
-       echo $error;   
-    }
-    else
-    {
-      $pwd=$_POST['pwd'];
-    }
-    $query=mysqli_query($con,"SELECT * FROM user WHERE username='".$userid."' AND pwd='".$pwd."'");
-    $numrows=mysqli_num_rows($query);
-    if($numrows==1)
-    {
-        while($row=mysqli_fetch_assoc($query))
-        {
-            $rights=$row['rights'];
-            $deptno=$row['deptno'];
-        }
-        switch($rights)
-        {
-            case 1:
-                session_start();
-                $_SESSION['sess_rights']=$rights;
-                header("Location: admin.php");
-                break;
-            case 2:
-                session_start();
-                $_SESSION['sess_rights']=$rights;
-                $_SESSION['sess_deptno']=$deptno;
-                header("Location: hod.php");
-                break;
-            case 3:
-                $_SESSION['sess_rights']=$rights;
-                header("Location: dhod.php");
-                break;
-            case 4:
-                $_SESSION['sess_rights']=$rights;
-                header("Location: shop.php");
-                break;
-            default: echo "Invalid rights of user.";
-        }
-    }
-    else
-    {
-        echo "Invalid username or password entered.<br>";
-    }
-  }
-  $_SESSION=array();
-  session_destroy();
-?>
-
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -144,25 +70,40 @@ function test_input($data) {
             <div class="col-12">
               <div class="row align-items-center">
                 <div class="col-lg-6 mb-4">
-                  <h1  data-aos="fade-up" data-aos-delay="100">Welcome to IMS Portal</h1>
-                  <p class="mb-4"  data-aos="fade-up" data-aos-delay="200">Log in and access your files.</p>
-
+                  <h1>Deputy Head of Department</h1>
+                  <p>List of Shops</p>
                 </div>
-
-                <div class="col-lg-5 ml-auto" data-aos="fade-up" data-aos-delay="500">
-                  <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="post" class="form-box">
-                    <h3 class="h4 text-black mb-4">Login</h3>
-                    <div class="form-group">
-                      <input class="form-control" placeholder="User ID" name="userid">
-                    </div>
-                    <div class="form-group">
-                      <input type="password" class="form-control" placeholder="Password" name="pwd">
-                    </div>
-                    <div class="form-group">
-                      <input type="submit" class="btn btn-primary btn-pill" value="Login" name="SUBMIT">
-                    </div>
-                  </form>
-
+                <div class="table-responsive">
+                  <table class="table table-hover table-dark">
+                    <thead class="thead-light">
+                      <tr>
+                        <th scope="col">Deputy Name</th>
+                        <th scope="col">Shop Name</th>
+                      </tr>                     
+                    </thead>
+                    <tbody>
+                      <?php
+                        $senior=$_GET['senior'];
+                        $deptno=$_GET['deptno'];
+                        $con=mysqli_connect("localhost","root","Orion@1234","project2");
+                        $query1=mysqli_query($con,"SELECT * FROM shop WHERE senior='".$senior."' AND deptno='".$deptno."'");
+                        $numrows=mysqli_num_rows($query1);
+                        if($numrows>0)
+                        {
+                          while($row=mysqli_fetch_assoc($query1))
+                          {
+                            echo "<td>".$senior."</td>";
+                            echo "<td>".$row['shopname']."</td>";
+                            echo "</tr>";
+                          }
+                        }
+                        else
+                        {
+                          echo "No shops Found";
+                        }
+                      ?>
+                    </tbody>                    
+                  </table>
                 </div>
               </div>
             </div>
@@ -174,8 +115,7 @@ function test_input($data) {
 
 
 </div>
-
-  <script src="js/jquery-3.3.1.min.js"></script>
+<script src="js/jquery-3.3.1.min.js"></script>
   <script src="js/jquery-migrate-3.0.1.min.js"></script>
   <script src="js/jquery-ui.js"></script>
   <script src="js/popper.min.js"></script>
@@ -191,6 +131,4 @@ function test_input($data) {
 
 
   <script src="js/main.js"></script>
-
   </body>
-</html>

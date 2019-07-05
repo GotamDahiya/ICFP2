@@ -1,3 +1,12 @@
+<?php
+  session_start();  
+  if(isset($_SESSION["sess_rights"]))
+  {
+    header("Location: login.php");
+  }
+  echo session_id();
+?>
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -81,7 +90,6 @@
                 			<tr>
                 				<th scope="col">Department Number</th>
                 				<th scope="col">Department Name</th>
-                				<th scope="col">Link</th>
                 			</tr>                			
                 		</thead>
                 		<tbody>
@@ -95,9 +103,8 @@
 									while($row=mysqli_fetch_assoc($query))
 									{
 										echo "<td>".$row['deptno']."</td>";
-										echo "<td>".$row['deptname']."</td>";
 										$deptno=$row['deptno'];
-										echo "<td><a href='hod.php?deptno=$deptno'>'".$row['deptname']."'</a></td>";
+										echo "<td><a href='hod.php?deptno=$deptno'>".$row['deptname']."</a></td>";
 										echo "</tr>";
 									}
 								}

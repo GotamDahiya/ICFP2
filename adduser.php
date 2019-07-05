@@ -1,12 +1,35 @@
-<?php  
-  session_start();
-  if(isset($_SESSION["sess_deptno"]))
-  {
-    header("Location: login.php");
-  }
-  echo session_id();
+<?php
+
+if(isset($_POST["SUBMIT"]))
+{
+	$con=mysqli_connect("localhost","root","Orion@1234","project2");
+	$username=$_POST["userid"];
+	$pwd=$_POST["pass"];
+	$mobile=$_POST["mobile"];
+	$deptname=$_POST["deptname"];
+	$rights=$_POST["rights"];
+	$email=$_POST["email"];
+	$query=mysqli_query($con,"SELECT * FROM user WHERE username='".$username."'");
+	$query1=mysqli_query($con,"SELECT * FROM department WHERE deptname='".$deptname."'");
+	$row=mysqli_fetch_assoc($query1);
+	$deptno=$row['deptno'];
+	$numrows=mysqli_num_rows($query);
+	if($numrows==0)
+	{
+		$query=mysqli_query($con,"INSERT INTO user VALUES ('".$deptno."','".$username."','".$pwd."','".$rights."','".$email."','".$mobile."')");
+		if($query===TRUE)
+		{
+			echo "<script type='text/javascript'>alert('Submitted successfully!')</script>";
+			header("Location: adduser.php");
+		}
+	}
+	else
+	{
+		echo "<script type='text/javascript'>alert('User already exists!')</script>";
+	}
+}
 ?>
-<?php session_start(); ?>
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -73,62 +96,43 @@
 
     <div class="intro-section" id="home-section">
 
-      <div class="slide-1" style="background-image: url('images/mountain.jpg');" data-stellar-background-ratio="0.5">
+      <div class="slide-1" style="background-image: url('images/Log.jpg');" data-stellar-background-ratio="0.5">
         <div class="container">
           <div class="row align-items-center">
             <div class="col-12">
               <div class="row align-items-center">
                 <div class="col-lg-6 mb-4">
-                  <h1  data-aos="fade-up" data-aos-delay="100">Head Of Department Page</h1>
-                  <p class="mb-4"  data-aos="fade-up" data-aos-delay="200">List of Deputy Heads</p>
+                  <h1  data-aos="fade-up" data-aos-delay="100">Add or Modify Users</h1>
+                  <p class="mb-4"  data-aos="fade-up" data-aos-delay="200">Enter details of the user. If a user with same username exists, this user will be modified. If it does not exist, a new user will be created.</p>
 
                 </div>
 
-                <div class="table-responsive">
-                  <table class="table table-hover table-dark">
-                    <thead class="thead-light">
-                      <tr>
-                        <th scope="col">Department Name</th>
-                        <th scope="col">Deputy Name</th>
-                      </tr>                     
-                    </thead>
-                    <tbody>
-                      <?php
-                        if(isset($_GET['deptno']))
-                        {
-                          $deptno=$_GET['deptno'];
-                        }
-                        else
-                        {
-                          $deptno=$_SESSION['sess_deptno'];
-                          echo $_SESSION['sess_deptno'];
-                          echo "B<br>";
-                        }
-                        echo $deptno;
-                        $con=mysqli_connect("localhost","root","Orion@1234","project2");
-                        $query=mysqli_query($con,"SELECT DISTINCT senior FROM shop WHERE deptno=$deptno");
-                        $query1=mysqli_query($con,"SELECT * FROM department WHERE deptno=$deptno");
-                        $deptname=mysqli_fetch_assoc($query1);
-                        $numrows=mysqli_num_rows($query);
-                        if($numrows>0)
-                        {
-                          while($row=mysqli_fetch_assoc($query))
-                          {
-                            $user=$row['senior'];
-                            $deptno=$deptname['deptno'];
-                            echo "<td>".$deptname['deptname']."</td>";
-                            echo "<td><a href='dhod.php?senior=$user&deptno=$deptno'>".$row['senior']."</a></td>";
-                            //echo "<td><a href='modifyuser.php?username=$user'>Edit</a></td>";
-                            echo "</tr>";
-                          }
-                        }
-                        else
-                        {
-                          echo "No deputy heads of departments";
-                        }
-                      ?>
-                    </tbody>                    
-                  </table>
+                <div class="col-lg-5 ml-auto" data-aos="fade-up" data-aos-delay="500">
+                  <form action="" method="post" class="form-box">
+                    <h3 class="h4 text-black mb-4">Enter user details</h3>
+                    <div class="form-group">
+                      <input type="text" class="form-control" placeholder="User Name" name="userid" method="post">
+                    </div>
+                    <div class="form-group">
+                      <input type="password" class="form-control" placeholder="Password" name="pass" method="post">
+                    </div>
+					<div class="form-group">
+                      <input type="number" class="form-control" placeholder="Mobile Number" name="mobile" method="post">
+                    </div>
+                    <div class="form-group">
+                      <input type="email" class="form-control" placeholder="Email" name="email" method="post">
+                    </div>
+					<div class="form-group">
+                      <input type="text" class="form-control" placeholder="Department Name" name="deptname" method="post">
+                    </div>
+                    <div class="form-group">
+                      <input type="number" class="form-control" placeholder="Priveleges" name="rights" method="post">
+                    </div>					  
+                    <div class="form-group">
+                      <input type="submit" class="btn btn-primary btn-pill" value="Add user" name="SUBMIT">
+                    </div>
+                  </form>
+
                 </div>
               </div>
             </div>
