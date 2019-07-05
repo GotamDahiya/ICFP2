@@ -153,7 +153,7 @@ function test_input($data) {
                   <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>" method="post" class="form-box">
                     <h3 class="h4 text-black mb-4">Login</h3>
                     <div class="form-group">
-                      <input class="form-control" placeholder="User ID" name="userid">
+                      <input type="text" class="form-control" placeholder="User ID" name="userid">
                     </div>
                     <div class="form-group">
                       <input type="password" class="form-control" placeholder="Password" name="pwd">

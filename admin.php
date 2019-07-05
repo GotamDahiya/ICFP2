@@ -4,7 +4,10 @@
   {
     header("Location: login.php");
   }
-  echo session_id();
+  $rights=$_SESSION['sess_rights'];
+  echo $_SESSION['sess_rights'];
+  echo "A";
+  echo $rights;
 ?>
 
 <!DOCTYPE html>

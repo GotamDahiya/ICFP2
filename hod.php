@@ -1,10 +1,15 @@
 <?php  
   session_start();
-  if(isset($_SESSION["sess_deptno"]))
+  if(isset($_SESSION["sess_rights"]))
   {
     header("Location: login.php");
   }
-  echo session_id();
+  $rights=$_SESSION['sess_rights'];
+  $deptno=$_POST['sess_deptno'];
+  echo $rights;
+  echo "<br>";
+  echo $deptno;
+  echo "<br>";
 ?>
 <?php session_start(); ?>
 <!DOCTYPE html>

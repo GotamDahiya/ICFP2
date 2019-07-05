@@ -6,6 +6,38 @@
 		$con=mysqli_connect("localhost","root","Orion@1234","project2");
 		$query=mysqli_query($con,"SELECT * FROM user WHERE username='".$username."'");
 		$row=mysqli_fetch_array($query);
+		$query1=mysqli_query($con,"SELECT * FROM department WHERE deptno='".$row['deptno']."'");
+		$row1=mysqli_fetch_array($query1);
+		
+		if($_POST["MODIFY"])
+		{
+			$userid=$_POST['userid'];
+			$pwd=$_POST['pass'];
+			$rights=$_POST['rights'];
+			$deptname=$_POST['deptname'];
+			$mobile=$_POST['mobile'];
+			$email=$_POST['email'];
+			$query2=mysqli_query($con,"SELECT * FROM department WHERE deptname='".$deptname."'");
+			$row2=mysqli_fetch_array($query2);
+			$deptno=$row2['deptno'];
+			//echo $deptno;
+			echo "A<br>";
+			echo $pwd;echo " ";echo $rights;echo " ";echo $deptname;echo " ";echo $mobile;echo " ";echo $email;
+			$query3=mysqli_query($con,"UPDATE user SET username='".$userid."',pwd='".$pwd."',rights='".$rights."',deptno='".$deptno."',mobile='".$mobile."',email='".$email."' WHERE username='".$username."'");
+			if($query3===TRUE)
+			{
+				//echo "<script type='text/javascript'>alert('Submitted successfully!')</script>";
+				header("Location: admin.php");
+			}
+			else
+			{
+				echo "<script type='text/javascript'>alert('User could not be updated check values!')</script>";
+			}
+		}
+		if($_POST["CANCEL"])
+		{
+			header("Location: admin.php");
+		}
 	}
 ?>
 
@@ -90,25 +122,32 @@
                   <form action="" method="post" class="form-box">
                     <h3 class="h4 text-black mb-4">Enter user details</h3>
                     <div class="form-group">
-                      <input type="text" class="form-control" name="userid" value="<?php echo $row['username']; ?>" method="post">
+                	  <label>User Name</label>
+                      <input type="text" class="form-control" name="userid" method="post" value="<?php echo $row['username']; ?>">
                     </div>
                     <div class="form-group">
-                      <input type="text" class="form-control"  name="pass" value="<?php echo $row['pwd']; ?>" method="post">
+                    	<label>Password</label>
+                      <input type="text" class="form-control"  name="pass" method="post" value="<?php echo $row['pwd']; ?>">
                     </div>
 					<div class="form-group">
-                      <input type="number" class="form-control" name="mobile" value="<?php echo $row['mobile']; ?>" method="post">
+						<label>Mobile Number</label>
+                      <input type="number" class="form-control" name="mobile" method="post" value="<?php echo $row['mobile']; ?>">
                     </div>
                     <div class="form-group">
-                      <input type="email" class="form-control" name="email" value="<?php echo $row['email']; ?>" method="post">
+                    	<label>Email</label>
+                      <input type="email" class="form-control" name="email" method="post" value="<?php echo $row['email']; ?>">
                     </div>
 					<div class="form-group">
-                      <input type="text" class="form-control" name="deptname" method="post" value="<?php echo $row['deptno']; ?>">
+						<label>Department Name</label>
+                      <input type="text" class="form-control" name="deptname" method="post" value="<?php echo $row1['deptname']; ?>">
                     </div>
                     <div class="form-group">
+                    	<label>Priveleges</label>
                       <input type="number" class="form-control" name="rights" method="post" value="<?php echo $row['rights']; ?>">
                     </div>					  
                     <div class="form-group">
-                      <input type="submit" class="btn btn-primary btn-pill" value="Modify user" name="MODIFY">
+                      <input type="submit" class="btn btn-danger btn-pill" value="Modify user" name="MODIFY">
+                    	<input type="submit" class="btn btn-primary btn-pill" value="Cancel" name="CANCEL">
                     </div>
                   </form>
 
