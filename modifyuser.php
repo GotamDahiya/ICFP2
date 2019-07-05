@@ -1,8 +1,12 @@
 <?php
-
-$con=mysqli_connect("localhost","root","Orion@1234","project2");
-$username=$_GET['user'];
-$query
+	session_start();
+	if(isset($_SESSION['sess_user']))
+	{
+		$username=$_SESSION['sess_user'];
+		$con=mysqli_connect("localhost","root","Orion@1234","project2");
+		$query=mysqli_query($con,"SELECT * FROM user WHERE username='".$username."'");
+		$row=mysqli_fetch_array($query);
+	}
 ?>
 
 <!DOCTYPE html>
@@ -86,25 +90,25 @@ $query
                   <form action="" method="post" class="form-box">
                     <h3 class="h4 text-black mb-4">Enter user details</h3>
                     <div class="form-group">
-                      <input type="text" class="form-control" placeholder="User Name" name="userid" method="post">
+                      <input type="text" class="form-control" name="userid" value="<?php echo $row['username']; ?>" method="post">
                     </div>
                     <div class="form-group">
-                      <input type="password" class="form-control" placeholder="Password" name="pass" method="post">
+                      <input type="text" class="form-control"  name="pass" value="<?php echo $row['pwd']; ?>" method="post">
                     </div>
 					<div class="form-group">
-                      <input type="number" class="form-control" placeholder="Mobile Number" name="mobile" method="post">
+                      <input type="number" class="form-control" name="mobile" value="<?php echo $row['mobile']; ?>" method="post">
                     </div>
                     <div class="form-group">
-                      <input type="email" class="form-control" placeholder="Email" name="email" method="post">
+                      <input type="email" class="form-control" name="email" value="<?php echo $row['email']; ?>" method="post">
                     </div>
 					<div class="form-group">
-                      <input type="text" class="form-control" placeholder="Department Name" name="deptname" method="post">
+                      <input type="text" class="form-control" name="deptname" method="post" value="<?php echo $row['deptno']; ?>">
                     </div>
                     <div class="form-group">
-                      <input type="number" class="form-control" placeholder="Priveleges" name="rights" method="post">
+                      <input type="number" class="form-control" name="rights" method="post" value="<?php echo $row['rights']; ?>">
                     </div>					  
                     <div class="form-group">
-                      <input type="submit" class="btn btn-primary btn-pill" value="Add user" name="SUBMIT">
+                      <input type="submit" class="btn btn-primary btn-pill" value="Modify user" name="MODIFY">
                     </div>
                   </form>
 

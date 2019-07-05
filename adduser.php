@@ -25,7 +25,9 @@ if(isset($_POST["SUBMIT"]))
 	}
 	else
 	{
-		echo "<script type='text/javascript'>alert('User already exists!')</script>";
+		session_start();
+		$_SESSION['sess_user']=$username;
+		header("Location: modifyuser.php");
 	}
 }
 ?>
