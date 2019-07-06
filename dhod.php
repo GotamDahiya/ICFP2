@@ -1,3 +1,19 @@
+<?php
+
+session_start();
+if(!isset($_SESSION['sess_rights']) || (time()-$_SESSION['last'])>600)
+{
+  header("Location: login.php");
+}
+$rights=$_SESSION['sess_rights'];
+$_SESSION['last']=time();
+if($rights>3)
+{
+  $_SESSION['sess_rights']=$rights;
+  header("Location: shop.php");
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -92,8 +108,9 @@
                         {
                           while($row=mysqli_fetch_assoc($query1))
                           {
+                            $shop=$row['shopname'];
                             echo "<td>".$senior."</td>";
-                            echo "<td>".$row['shopname']."</td>";
+                            echo "<td><a href='shop.php?shop=$shop&deptno=$deptno'>".$row['shopname']."</a></td>";
                             echo "</tr>";
                           }
                         }

@@ -1,44 +1,72 @@
 <?php
 	session_start();
-	if(isset($_SESSION['sess_user']))
-	{
-		$username=$_SESSION['sess_user'];
-		$con=mysqli_connect("localhost","root","Orion@1234","project2");
-		$query=mysqli_query($con,"SELECT * FROM user WHERE username='".$username."'");
-		$row=mysqli_fetch_array($query);
-		$query1=mysqli_query($con,"SELECT * FROM department WHERE deptno='".$row['deptno']."'");
-		$row1=mysqli_fetch_array($query1);
-		
-		if($_POST["MODIFY"])
-		{
-			$userid=$_POST['userid'];
-			$pwd=$_POST['pass'];
-			$rights=$_POST['rights'];
-			$deptname=$_POST['deptname'];
-			$mobile=$_POST['mobile'];
-			$email=$_POST['email'];
-			$query2=mysqli_query($con,"SELECT * FROM department WHERE deptname='".$deptname."'");
-			$row2=mysqli_fetch_array($query2);
-			$deptno=$row2['deptno'];
-			$query3=mysqli_query($con,"UPDATE user SET username='".$userid."',pwd='".$pwd."',rights='".$rights."',deptno='".$deptno."',mobile='".$mobile."',email='".$email."' WHERE username='".$username."'");
-			if($query3===TRUE)
-			{
-				//echo "<script type='text/javascript'>alert('Submitted successfully!')</script>";
-				header("Location: admin.php");
-			}
-			else
-			{
-				echo "<script type='text/javascript'>alert('User could not be updated check values!')</script>";
-			}
-		}
-		if($_POST["CANCEL"])
-		{
-			header("Location: admin.php");
-		}
-	}
-  else
+  if(!isset($_SESSION['sess_rights']) || (time()-$_SESSION['last'])>120)
   {
     header("Location: login.php");
+  }
+  $rights=$_SESSION['sess_rights'];
+  if($rights>1)
+  {
+    switch ($rights) {
+      case 2:
+        $_SESSION['sess_rights']=$rights;
+        header("Location: hod.php");
+        break;
+      case 3:
+        $_SESSION['sess_rights']=$rights;
+        header("Location: dhod.php");
+        break;
+      case 4:
+        $_SESSION['sess_rights']=$rights;
+        header("Location: shop.php");
+        break;      
+      default:
+        header("Location: login.php");
+        break;
+    } 
+  }
+  else
+	{
+    if(isset($_SESSION['sess_user']))
+    {
+      $username=$_SESSION['sess_user'];
+      $con=mysqli_connect("localhost","root","Orion@1234","project2");
+      $query=mysqli_query($con,"SELECT * FROM user WHERE username='".$username."'");
+      $row=mysqli_fetch_array($query);
+      $query1=mysqli_query($con,"SELECT * FROM department WHERE deptno='".$row['deptno']."'");
+      $row1=mysqli_fetch_array($query1);
+      
+      if($_POST["MODIFY"])
+      {
+        $userid=$_POST['userid'];
+        $pwd=$_POST['pass'];
+        $rights=$_POST['rights'];
+        $deptname=$_POST['deptname'];
+        $mobile=$_POST['mobile'];
+        $email=$_POST['email'];
+        $query2=mysqli_query($con,"SELECT * FROM department WHERE deptname='".$deptname."'");
+        $row2=mysqli_fetch_array($query2);
+        $deptno=$row2['deptno'];
+        $query3=mysqli_query($con,"UPDATE user SET username='".$userid."',pwd='".$pwd."',rights='".$rights."',deptno='".$deptno."',mobile='".$mobile."',email='".$email."' WHERE username='".$username."'");
+        if($query3===TRUE)
+        {
+          //echo "<script type='text/javascript'>alert('Submitted successfully!')</script>";
+          header("Location: admin.php");
+        }
+        else
+        {
+          echo "<script type='text/javascript'>alert('User could not be updated check values!')</script>";
+        }
+      }
+      if($_POST["CANCEL"])
+      {
+        header("Location: admin.php");
+      }
+    }
+    else
+    {
+      header("Location: login.php");
+    }
   }
 ?>
 
@@ -115,7 +143,7 @@
               <div class="row align-items-center">
                 <div class="col-lg-6 mb-4">
                   <h1  data-aos="fade-up" data-aos-delay="100">Add or Modify Users</h1>
-                  <p class="mb-4"  data-aos="fade-up" data-aos-delay="200">Enter details of the user. If a user with same username exists, this user will be modified. If it does not exist, a new user will be created.</p>
+                  <p class="mb-4"  data-aos="fade-up" data-aos-delay="200">The user details are alredy present.You may either modify or let the details be.</p>
 
                 </div>
 

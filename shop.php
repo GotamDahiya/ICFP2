@@ -1,31 +1,14 @@
-<?php  
-  session_start();
-  if(!isset($_SESSION["sess_rights"]) || (time()-$_SESSION['last'])>600)
-  {
-    header("Location: login.php");
-  }
-  $rights=$_SESSION['sess_rights'];
-  $_SESSION['last']=time();
-  if($rights>2)
-  {
-    switch ($rights) {
-      case 3:
-        $_SESSION['sess_rights']=$rights;
-        header("Location: dhod.php");
-        break;
-      case 4:
-        $_SESSION['sess_rights']=$rights;
-        header("Location: shop.php");
-        break;
-      default: header("Location: login.php");
-    }
-  }
-  // echo $rights;
-  // echo "a ";
-  // echo $_SESSION['sess_deptno'];
-  // echo "b ";
+<?php
+
+session_start();
+if(!isset($_SESSION['sess_rights'])|| (time()-$_SESSION['last'])>600)
+{
+	header("Location: login.php");
+}
+$_SESSION['last']=time();
+$rights=$_SESSION['sess_rights'];
 ?>
-<?php session_start(); ?>
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -92,61 +75,48 @@
 
     <div class="intro-section" id="home-section">
 
-      <div class="slide-1" style="background-image: url('images/mountain.jpg');" data-stellar-background-ratio="0.5">
+      <div class="slide-1" style="background-image: url('images/Log.jpg');" data-stellar-background-ratio="0.5">
         <div class="container">
           <div class="row align-items-center">
             <div class="col-12">
               <div class="row align-items-center">
                 <div class="col-lg-6 mb-4">
-                  <h1  data-aos="fade-up" data-aos-delay="100">Head Of Department Page</h1>
-                  <p class="mb-4"  data-aos="fade-up" data-aos-delay="200">List of Deputy Heads</p>
-
+                  <h1>Shop <?php $shop=$_GET['shop']; ?> Page</h1>
+                  <p>List of Documents</p>
                 </div>
-
                 <div class="table-responsive">
                   <table class="table table-hover table-dark">
                     <thead class="thead-light">
                       <tr>
-                        <th scope="col">Department Name</th>
-                        <th scope="col">Deputy Name</th>
+                        <th scope="col">Document Name</th>
+                        <th scope="col">Document</th>
                       </tr>                     
                     </thead>
                     <tbody>
                       <?php
-                        if(isset($_GET['deptno']))
-                        {
-                          $deptno=$_GET['deptno'];
-                        }
-                        else
-                        {
-                          $deptno=$_SESSION['sess_deptno'];
-                        }
-                        //echo $deptno;
+                        $shop=$_GET['shop'];
+                        $deptno=$_GET['deptno'];
                         $con=mysqli_connect("localhost","root","Orion@1234","project2");
-                        $query=mysqli_query($con,"SELECT DISTINCT senior FROM shop WHERE deptno=$deptno");
-                        $query1=mysqli_query($con,"SELECT * FROM department WHERE deptno=$deptno");
-                        $deptname=mysqli_fetch_assoc($query1);
+                        $query=mysqli_query($con,"SELECT * FROM document WHERE shop='".$shop."' AND deptno='".$deptno."'");
                         $numrows=mysqli_num_rows($query);
                         if($numrows>0)
                         {
                           while($row=mysqli_fetch_assoc($query))
                           {
-                            $user=$row['senior'];
-                            $deptno=$deptname['deptno'];
-                            echo "<td>".$deptname['deptname']."</td>";
-                            echo "<td><a href='dhod.php?senior=$user&deptno=$deptno'>".$row['senior']."</a></td>";
-                            //echo "<td><a href='modifyuser.php?username=$user'>Edit</a></td>";
+                            echo "<td>".$row['docname']."</td>";
+                            echo "<td>".$row['doc']."</td>";
                             echo "</tr>";
                           }
                         }
                         else
                         {
-                          echo "No deputy heads of departments";
+                          echo "No documents Found";
                         }
                       ?>
                     </tbody>                    
                   </table>
                 </div>
+                
               </div>
             </div>
 
@@ -157,8 +127,7 @@
 
 
 </div>
-
-  <script src="js/jquery-3.3.1.min.js"></script>
+<script src="js/jquery-3.3.1.min.js"></script>
   <script src="js/jquery-migrate-3.0.1.min.js"></script>
   <script src="js/jquery-ui.js"></script>
   <script src="js/popper.min.js"></script>
@@ -174,6 +143,4 @@
 
 
   <script src="js/main.js"></script>
-
   </body>
-</html>

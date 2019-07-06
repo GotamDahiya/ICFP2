@@ -1,29 +1,59 @@
 <?php
-  
-if($_POST['SUBMIT'])
-{
-  $con=mysqli_connect("localhost","root","Orion@1234","project2");
-  $username=$_POST['userid'];
-  $pwd=$_POST['pwd'];
-  $adminpwd=$_POST['adminpwd'];
-  $query=mysqli_query($con,"SELECT * FROM user WHERE pwd='".$adminpwd."'");
-  $numrows=mysqli_num_rows($query);
-  if($numrows > 0)
-  {
-    $query1=mysqli_query($con,"DELETE FROM user WHERE username='".$username."' AND pwd='".$pwd."'");
-    if($query1===TRUE)
-    {
-      echo "<script type='text/javascript'>alert('User successfully deleted!')</script>";
-    }
-    else
-    {
-      echo "<script type='text/javascript'>alert('User could not be deleted check values!')</script>";
-    }
-  }
-}
-if($_POST['CANCEL'])
+
+session_start();
+if(!isset($_SESSION['sess_rights']) || (time()-$_SESSION['last'])>120)
 {
   header("Location: login.php");
+}
+$_SESSION['last']=time();
+$rights=$_SESSION['sess_rights'];
+if($rights>1)
+{
+  switch ($rights) {
+      case 2:
+        $_SESSION['sess_rights']=$rights;
+        header("Location: hod.php");
+        break;
+      case 3:
+        $_SESSION['sess_rights']=$rights;
+        header("Location: dhod.php");
+        break;
+      case 4:
+        $_SESSION['sess_rights']=$rights;
+        header("Location: shop.php");
+        break;      
+      default:
+        header("Location: login.php");
+        break;
+  }
+}
+else
+{
+  if($_POST['SUBMIT'])
+  {
+    $con=mysqli_connect("localhost","root","Orion@1234","project2");
+    $username=$_POST['userid'];
+    $pwd=$_POST['pwd'];
+    $adminpwd=$_POST['adminpwd'];
+    $query=mysqli_query($con,"SELECT * FROM user WHERE pwd='".$adminpwd."'");
+    $numrows=mysqli_num_rows($query);
+    if($numrows > 0)
+    {
+      $query1=mysqli_query($con,"DELETE FROM user WHERE username='".$username."' AND pwd='".$pwd."'");
+      if($query1===TRUE)
+      {
+        echo "<script type='text/javascript'>alert('User successfully deleted!')</script>";
+      }
+      else
+      {
+        echo "<script type='text/javascript'>alert('User could not be deleted check values!')</script>";
+      }
+    }
+  }
+  if($_POST['CANCEL'])
+  {
+    header("Location: login.php");
+  }
 }
 ?>
 <!DOCTYPE html>
@@ -98,8 +128,8 @@ if($_POST['CANCEL'])
             <div class="col-12">
               <div class="row align-items-center">
                 <div class="col-lg-6 mb-4">
-                  <h1  data-aos="fade-up" data-aos-delay="100">Welcome to IMS Portal</h1>
-                  <p class="mb-4"  data-aos="fade-up" data-aos-delay="200">Log in and access your files.</p>
+                  <h1  data-aos="fade-up" data-aos-delay="100">Delete User Page!!</h1>
+                  <p class="mb-4"  data-aos="fade-up" data-aos-delay="200">Please be careful in whom you delete.Please you hairy full of shit cunt-faced cocksucker!!!!!!!!!!!!!!!!!!!!!</p>
 
                 </div>
 

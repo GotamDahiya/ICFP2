@@ -1,12 +1,41 @@
 <?php
   session_start();  
-  if(isset($_SESSION["sess_rights"]))
+  if(!isset($_SESSION["sess_rights"]) || (time()-$_SESSION['last'])>600)
   {
     header("Location: login.php");
   }
   $rights=$_SESSION['sess_rights'];
-  echo $_SESSION['sess_rights'];
-  echo $rights;
+  $_SESSION['last']=time();
+  if($rights>1)
+  {
+    switch ($rights) {
+      case 2:
+        $_SESSION['sess_rights']=$rights;
+        header("Location: hod.php");
+        break;
+      case 3:
+        $_SESSION['sess_rights']=$rights;
+        header("Location: dhod.php");
+        break;
+      case 4:
+        $_SESSION['sess_rights']=$rights;
+        header("Location: shop.php");
+        break;      
+      default:
+        header("Location: login.php");
+        break;
+    }
+  }
+  if($_POST['ADD'])
+  {
+    $_SESSION['sess_rights']=$rights;
+    header("Location: adduser.php");
+  }
+  if($_POST["CANCEL"])
+  {
+    $_SESSION['sess_rights']=$rights;
+    header("Location: deleteuser.php");
+  }
 ?>
 
 <!DOCTYPE html>
@@ -97,30 +126,35 @@
                 		<tbody>
                 			<?php
 
-								$con=mysqli_connect("localhost","root","Orion@1234","project2");
-								$query=mysqli_query($con,"SELECT * FROM department");
-								$numrows=mysqli_num_rows($query);
-								if($numrows>0)
-								{
-									while($row=mysqli_fetch_assoc($query))
-									{
-										echo "<td>".$row['deptno']."</td>";
-										$deptno=$row['deptno'];
-										echo "<td><a href='hod.php?deptno=$deptno'>".$row['deptname']."</a></td>";
-										echo "</tr>";
-									}
-								}
-								else
-								{
-									echo "No departments";
-								}
-							?>
+      								$con=mysqli_connect("localhost","root","Orion@1234","project2");
+      								$query=mysqli_query($con,"SELECT * FROM department");
+      								$numrows=mysqli_num_rows($query);
+      								if($numrows>0)
+      								{
+      									while($row=mysqli_fetch_assoc($query))
+      									{
+      										echo "<td>".$row['deptno']."</td>";
+      										$deptno=$row['deptno'];
+      										echo "<td><a href='hod.php?deptno=$deptno'>".$row['deptname']."</a></td>";
+      										echo "</tr>";
+      									}
+      								}
+      								else
+      								{
+      									echo "No departments";
+      								}
+      							?>
                 		</tbody>                		
                 	</table>
                 </div>
+                <form action="" method="post" class="form-box">
+                  <div class="form-group">
+                    <input type="submit" class="btn btn-primary btn-pill" value="Add User" name="ADD">
+                    <input type="submit" class="btn btn-danger btn-pill" value="Delete User" name="CANCEL">
+                  </div>
+                </form>
               </div>
             </div>
-
           </div>
         </div>
       </div>

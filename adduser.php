@@ -1,38 +1,73 @@
 <?php
 
-if(isset($_POST["SUBMIT"]))
+session_start();
+if(!isset($_SESSION['sess_rights']) || (time()-$_SESSION['last'])>120)
 {
-	$con=mysqli_connect("localhost","root","Orion@1234","project2");
-	$username=$_POST["userid"];
-	$pwd=$_POST["pass"];
-	$mobile=$_POST["mobile"];
-	$deptname=$_POST["deptname"];
-	$rights=$_POST["rights"];
-	$email=$_POST["email"];
-	$query=mysqli_query($con,"SELECT * FROM user WHERE username='".$username."'");
-	$query1=mysqli_query($con,"SELECT * FROM department WHERE deptname='".$deptname."'");
-	$row=mysqli_fetch_assoc($query1);
-	$deptno=$row['deptno'];
-	$numrows=mysqli_num_rows($query);
-	if($numrows==0)
-	{
-		$query=mysqli_query($con,"INSERT INTO user VALUES ('".$deptno."','".$username."','".$pwd."','".$rights."','".$email."','".$mobile."')");
-		if($query===TRUE)
-		{
-      // if($rights>=2)
-      // {
+  header("Location: login.php");
+}
+$_SESSION['last']=time();
+$rights=$_SESSION['sess_rights'];
+if($rights>1)
+{
+  switch ($rights) {
+      case 2:
+        $_SESSION['sess_rights']=$rights;
+        header("Location: hod.php");
+        break;
+      case 3:
+        $_SESSION['sess_rights']=$rights;
+        header("Location: dhod.php");
+        break;
+      case 4:
+        $_SESSION['sess_rights']=$rights;
+        header("Location: shop.php");
+        break;      
+      default:
+        header("Location: login.php");
+        break;
+  }
+}
+else
+{
+  if(isset($_POST["SUBMIT"]))
+  {
+    $con=mysqli_connect("localhost","root","Orion@1234","project2");
+    $username=$_POST["userid"];
+    $pwd=$_POST["pass"];
+    $mobile=$_POST["mobile"];
+    $deptname=$_POST["deptname"];
+    $rights=$_POST["rights"];
+    $email=$_POST["email"];
+    $query=mysqli_query($con,"SELECT * FROM user WHERE username='".$username."'");
+    $query1=mysqli_query($con,"SELECT * FROM department WHERE deptname='".$deptname."'");
+    $row=mysqli_fetch_assoc($query1);
+    $deptno=$row['deptno'];
+    $numrows=mysqli_num_rows($query);
+    if($numrows==0)
+    {
+      $query=mysqli_query($con,"INSERT INTO user VALUES ('".$deptno."','".$username."','".$pwd."','".$rights."','".$email."','".$mobile."')");
+      if($query===TRUE)
+      {
+        if($rights==2)
+        {
 
-      // }
-			echo "<script type='text/javascript'>alert('Submitted successfully!')</script>";
-			//header("Location: adduser.php");
-		}
-	}
-	else
-	{
-		session_start();
-		$_SESSION['sess_user']=$username;
-		header("Location: modifyuser.php");
-	}
+        }
+        echo "<script type='text/javascript'>alert('Submitted successfully!')</script>";
+        //header("Location: adduser.php");
+      }
+    }
+    else
+    {
+      session_start();
+      $_SESSION['sess_user']=$username;
+      $_SESSION['sess_rights']=$rights;
+      header("Location: modifyuser.php");
+    }
+    if($_POST['CANCEL'])
+    {
+      header("Location: admin.php");
+    }
+  }
 }
 ?>
 
@@ -136,6 +171,7 @@ if(isset($_POST["SUBMIT"]))
                     </div>					  
                     <div class="form-group">
                       <input type="submit" class="btn btn-primary btn-pill" value="Add user" name="SUBMIT">
+                      <input type="submit" class="btn btn-secondary btm-pill" value="Cancel" name="CANCEL">
                     </div>
                   </form>
 

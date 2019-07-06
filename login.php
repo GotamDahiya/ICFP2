@@ -39,6 +39,7 @@ function test_input($data) {
             $rights=$row['rights'];
             $deptno=$row['deptno'];
         }
+        $_SESSION['last']=time();
         switch($rights)
         {
             case 1:
@@ -60,7 +61,7 @@ function test_input($data) {
                 $_SESSION['sess_rights']=$rights;
                 header("Location: shop.php");
                 break;
-            default: echo "Invalid rights of user.";
+            default: header("Location: login.php");
         }
     }
     else
@@ -68,8 +69,6 @@ function test_input($data) {
         echo "Invalid username or password entered.<br>";
     }
   }
-  $_SESSION=array();
-  session_destroy();
 ?>
 
 <!DOCTYPE html>
