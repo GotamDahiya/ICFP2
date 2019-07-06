@@ -20,9 +20,6 @@
 			$query2=mysqli_query($con,"SELECT * FROM department WHERE deptname='".$deptname."'");
 			$row2=mysqli_fetch_array($query2);
 			$deptno=$row2['deptno'];
-			//echo $deptno;
-			echo "A<br>";
-			echo $pwd;echo " ";echo $rights;echo " ";echo $deptname;echo " ";echo $mobile;echo " ";echo $email;
 			$query3=mysqli_query($con,"UPDATE user SET username='".$userid."',pwd='".$pwd."',rights='".$rights."',deptno='".$deptno."',mobile='".$mobile."',email='".$email."' WHERE username='".$username."'");
 			if($query3===TRUE)
 			{
@@ -39,6 +36,10 @@
 			header("Location: admin.php");
 		}
 	}
+  else
+  {
+    header("Location: login.php");
+  }
 ?>
 
 <!DOCTYPE html>

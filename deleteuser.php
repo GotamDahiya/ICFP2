@@ -1,14 +1,31 @@
 <?php
-  session_start();  
-  if(isset($_SESSION["sess_rights"]))
+  
+if($_POST['SUBMIT'])
+{
+  $con=mysqli_connect("localhost","root","Orion@1234","project2");
+  $username=$_POST['userid'];
+  $pwd=$_POST['pwd'];
+  $adminpwd=$_POST['adminpwd'];
+  $query=mysqli_query($con,"SELECT * FROM user WHERE pwd='".$adminpwd."'");
+  $numrows=mysqli_num_rows($query);
+  if($numrows > 0)
   {
-    header("Location: login.php");
+    $query1=mysqli_query($con,"DELETE FROM user WHERE username='".$username."' AND pwd='".$pwd."'");
+    if($query1===TRUE)
+    {
+      echo "<script type='text/javascript'>alert('User successfully deleted!')</script>";
+    }
+    else
+    {
+      echo "<script type='text/javascript'>alert('User could not be deleted check values!')</script>";
+    }
   }
-  $rights=$_SESSION['sess_rights'];
-  echo $_SESSION['sess_rights'];
-  echo $rights;
+}
+if($_POST['CANCEL'])
+{
+  header("Location: login.php");
+}
 ?>
-
 <!DOCTYPE html>
 <html lang="en">
   <head>
@@ -75,48 +92,35 @@
 
     <div class="intro-section" id="home-section">
 
-      <div class="slide-1" style="background-image: url('images/mountain.jpg');" data-stellar-background-ratio="0.5">
+      <div class="slide-1" style="background-image: url('images/Log.jpg');" data-stellar-background-ratio="0.5">
         <div class="container">
           <div class="row align-items-center">
             <div class="col-12">
               <div class="row align-items-center">
                 <div class="col-lg-6 mb-4">
-                  <h1  data-aos="fade-up" data-aos-delay="100">Administrator Page</h1>
-                  <p class="mb-4"  data-aos="fade-up" data-aos-delay="200">List of Departments</p>
+                  <h1  data-aos="fade-up" data-aos-delay="100">Welcome to IMS Portal</h1>
+                  <p class="mb-4"  data-aos="fade-up" data-aos-delay="200">Log in and access your files.</p>
 
                 </div>
 
-                <div class="table-responsive">
-                	<table class="table table-hover table-dark">
-                		<thead class="thead-light">
-                			<tr>
-                				<th scope="col">Department Number</th>
-                				<th scope="col">Department Name</th>
-                			</tr>                			
-                		</thead>
-                		<tbody>
-                			<?php
+                <div class="col-lg-5 ml-auto" data-aos="fade-up" data-aos-delay="500">
+                  <form action="" method="post" class="form-box">
+                    <h3 class="h4 text-black mb-4">Login</h3>
+                    <div class="form-group">
+                      <input type="text" class="form-control" placeholder="User ID" name="userid" method="post">
+                    </div>
+                    <div class="form-group">
+                      <input type="password" class="form-control" placeholder="Password" name="pwd" method="post">
+                    </div>
+                    <div class="form-group">
+                      <input type="password" class="form-control" placeholder="Administrator Password" name="adminpwd" method="post">
+                    </div>
+                    <div class="form-group">
+                      <input type="submit" class="btn btn-danger btn-pill" value="Delete User" name="SUBMIT">
+                      <input type="submit" class="btn btn-primary btn-pill" value="Cancel" name="CANCEL">
+                    </div>
+                  </form>
 
-								$con=mysqli_connect("localhost","root","Orion@1234","project2");
-								$query=mysqli_query($con,"SELECT * FROM department");
-								$numrows=mysqli_num_rows($query);
-								if($numrows>0)
-								{
-									while($row=mysqli_fetch_assoc($query))
-									{
-										echo "<td>".$row['deptno']."</td>";
-										$deptno=$row['deptno'];
-										echo "<td><a href='hod.php?deptno=$deptno'>".$row['deptname']."</a></td>";
-										echo "</tr>";
-									}
-								}
-								else
-								{
-									echo "No departments";
-								}
-							?>
-                		</tbody>                		
-                	</table>
                 </div>
               </div>
             </div>

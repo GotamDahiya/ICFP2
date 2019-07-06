@@ -19,8 +19,12 @@ if(isset($_POST["SUBMIT"]))
 		$query=mysqli_query($con,"INSERT INTO user VALUES ('".$deptno."','".$username."','".$pwd."','".$rights."','".$email."','".$mobile."')");
 		if($query===TRUE)
 		{
+      // if($rights>=2)
+      // {
+
+      // }
 			echo "<script type='text/javascript'>alert('Submitted successfully!')</script>";
-			header("Location: adduser.php");
+			//header("Location: adduser.php");
 		}
 	}
 	else
