@@ -7,6 +7,14 @@ if(!isset($_SESSION['sess_rights'])|| (time()-$_SESSION['last'])>600)
 }
 $_SESSION['last']=time();
 $rights=$_SESSION['sess_rights'];
+
+if($_POST['UPLOAD'])
+{
+	$_SESSION['sess_rights']=$rights;
+	$_SESSION['sess_deptno']=$_GET['deptno'];
+	$_SESSION['sess_shop']=$_GET['shop'];
+	header("Location: upload.php");
+}
 ?>
 
 <!DOCTYPE html>
@@ -81,7 +89,8 @@ $rights=$_SESSION['sess_rights'];
             <div class="col-12">
               <div class="row align-items-center">
                 <div class="col-lg-6 mb-4">
-                  <h1>Shop <?php $shop=$_GET['shop']; ?> Page</h1>
+                  <!-- <h1>Shop Page</h1> -->
+                  <?php echo $_POST['shop']; ?>
                   <p>List of Documents</p>
                 </div>
                 <div class="table-responsive">
@@ -94,8 +103,17 @@ $rights=$_SESSION['sess_rights'];
                     </thead>
                     <tbody>
                       <?php
-                        $shop=$_GET['shop'];
-                        $deptno=$_GET['deptno'];
+                        if($_POST['SHOP'])
+                        {
+                        	$shop=$_POST['shop'];
+                        	$deptno=$_POST['deptno'];
+                        	//echo "A";
+                        }
+                        else
+                        {
+                        	$shop=$_SESSION['sess_shop'];
+                        	$deptno=$_SESSION['sess_deptno'];
+                        }
                         $con=mysqli_connect("localhost","root","Orion@1234","project2");
                         $query=mysqli_query($con,"SELECT * FROM document WHERE shop='".$shop."' AND deptno='".$deptno."'");
                         $numrows=mysqli_num_rows($query);
@@ -110,13 +128,17 @@ $rights=$_SESSION['sess_rights'];
                         }
                         else
                         {
-                          echo "No documents Found";
+                          echo "<h4>No documents Found</h4>";
                         }
                       ?>
                     </tbody>                    
                   </table>
                 </div>
-                
+            	<form action="" method="post" class="form-box">
+            		<div class="form-group">
+            			<input type="submit" class="btn btn-primary btn-pill" value="Upload" name="UPLOAD">
+            		</div>
+            	</form>
               </div>
             </div>
 

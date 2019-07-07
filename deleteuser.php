@@ -1,7 +1,7 @@
 <?php
 
 session_start();
-if(!isset($_SESSION['sess_rights']) || (time()-$_SESSION['last'])>120)
+if(!isset($_SESSION['sess_rights']) || (time()-$_SESSION['last'])>600)
 {
   header("Location: login.php");
 }
@@ -129,7 +129,7 @@ else
               <div class="row align-items-center">
                 <div class="col-lg-6 mb-4">
                   <h1  data-aos="fade-up" data-aos-delay="100">Delete User Page!!</h1>
-                  <p class="mb-4"  data-aos="fade-up" data-aos-delay="200">Please be careful in whom you delete.Please you hairy full of shit cunt-faced cocksucker!!!!!!!!!!!!!!!!!!!!!</p>
+                  <p class="mb-4"  data-aos="fade-up" data-aos-delay="200">Please be careful in whom you delete.</p>
 
                 </div>
 

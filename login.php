@@ -55,10 +55,14 @@ function test_input($data) {
                 break;
             case 3:
                 $_SESSION['sess_rights']=$rights;
+                $_SESSION['sess_deptno']=$deptno;
+                $_SESSION['sess_user']=$userid;
                 header("Location: dhod.php");
                 break;
             case 4:
                 $_SESSION['sess_rights']=$rights;
+                $_SESSION['sess_deptno']=$deptno;
+                $_SESSION['sess_shop']=$userid;
                 header("Location: shop.php");
                 break;
             default: header("Location: login.php");
@@ -66,7 +70,7 @@ function test_input($data) {
     }
     else
     {
-        echo "Invalid username or password entered.<br>";
+        echo "<script type='text/javascript'>alert('No such user exists!')</script>";
     }
   }
 ?>

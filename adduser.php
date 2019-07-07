@@ -1,7 +1,7 @@
 <?php
 
 session_start();
-if(!isset($_SESSION['sess_rights']) || (time()-$_SESSION['last'])>120)
+if(!isset($_SESSION['sess_rights']) || (time()-$_SESSION['last'])>600)
 {
   header("Location: login.php");
 }

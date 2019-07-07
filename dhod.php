@@ -99,8 +99,19 @@ if($rights>3)
                     </thead>
                     <tbody>
                       <?php
-                        $senior=$_GET['senior'];
-                        $deptno=$_GET['deptno'];
+                        
+                        if($_POST['SENIOR'])
+                        {
+                          $senior=$_POST['senior'];
+                          $deptno=$_POST['deptno'];  
+                          //echo "A";
+                        }
+                        else
+                        {
+                          $deptno=$_SESSION['deptno'];
+                          $senior=$_SESSION['sess_user'];
+                          //echo "B";
+                        }
                         $con=mysqli_connect("localhost","root","Orion@1234","project2");
                         $query1=mysqli_query($con,"SELECT * FROM shop WHERE senior='".$senior."' AND deptno='".$deptno."'");
                         $numrows=mysqli_num_rows($query1);
@@ -110,13 +121,19 @@ if($rights>3)
                           {
                             $shop=$row['shopname'];
                             echo "<td>".$senior."</td>";
-                            echo "<td><a href='shop.php?shop=$shop&deptno=$deptno'>".$row['shopname']."</a></td>";
+                            //echo "<td><a href='shop.php?shop=$shop&deptno=$deptno'>".$row['shopname']."</a></td>";
+                            echo "<td>
+                            <form action='/ICFP2/shop.php' method='post'>
+                            <input type='hidden' value=$shop name=shop>
+                            <input type='hidden' value=$deptno name=deptno>
+                            <input type='submit' class='btn btn-primary btn-pill' value='".$row['shopname']."' name='SHOP'>
+                            </form></td>";
                             echo "</tr>";
                           }
                         }
                         else
                         {
-                          echo "No shops Found";
+                          echo "<h4>No shops Found</h4>";
                         }
                       ?>
                     </tbody>                    

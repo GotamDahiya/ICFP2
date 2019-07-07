@@ -119,8 +119,8 @@
                 	<table class="table table-hover table-dark">
                 		<thead class="thead-light">
                 			<tr>
-                				<th scope="col">Department Number</th>
                 				<th scope="col">Department Name</th>
+                				<th scope="col">Department Number</th>
                 			</tr>                			
                 		</thead>
                 		<tbody>
@@ -133,9 +133,13 @@
       								{
       									while($row=mysqli_fetch_assoc($query))
       									{
-      										echo "<td>".$row['deptno']."</td>";
+      										echo "<td>".$row['deptname']."</td>";
       										$deptno=$row['deptno'];
-      										echo "<td><a href='hod.php?deptno=$deptno'>".$row['deptname']."</a></td>";
+      										// echo "<td><a href='hod.php?deptno=$deptno'>".$row['deptname']."</a></td>";
+                          echo "<td>
+                            <form action='/ICFP2/hod.php' method='post'>
+                              <input type='submit' class='btn btn-pill btn-primary' value=$deptno name=deptno>
+                            </form></td>";
       										echo "</tr>";
       									}
       								}

@@ -113,13 +113,15 @@
                     </thead>
                     <tbody>
                       <?php
-                        if(isset($_GET['deptno']))
+                        if(isset($_POST['deptno']))
                         {
-                          $deptno=$_GET['deptno'];
+                          $deptno=$_POST['deptno'];
+                          //echo "A";
                         }
                         else
                         {
                           $deptno=$_SESSION['sess_deptno'];
+                          echo "B";
                         }
                         //echo $deptno;
                         $con=mysqli_connect("localhost","root","Orion@1234","project2");
@@ -134,14 +136,19 @@
                             $user=$row['senior'];
                             $deptno=$deptname['deptno'];
                             echo "<td>".$deptname['deptname']."</td>";
-                            echo "<td><a href='dhod.php?senior=$user&deptno=$deptno'>".$row['senior']."</a></td>";
-                            //echo "<td><a href='modifyuser.php?username=$user'>Edit</a></td>";
+                            //echo "<td><a href='dhod.php?senior=$user&deptno=$deptno'>".$row['senior']."</a></td>";
+                            echo "<td>
+                            <form action='/ICFP2/dhod.php' method='post'>
+                              <input type='hidden' value=$user name=senior>
+                              <input type='hidden' value=$deptno name=deptno>
+                              <input type='submit' class='btn btn-primary btn-pill' value='".$row['senior']."' name='SENIOR'>
+                            </form></td>";    
                             echo "</tr>";
                           }
                         }
                         else
                         {
-                          echo "No deputy heads of departments";
+                          echo "<h4>No deputy heads of departments</h4>";
                         }
                       ?>
                     </tbody>                    
