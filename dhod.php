@@ -12,6 +12,11 @@ if($rights>3)
   $_SESSION['sess_rights']=$rights;
   header("Location: shop.php");
 }
+if($_POST['logout'])
+{
+  session_destroy();
+  header("Location: login.php");
+}
 ?>
 
 <!DOCTYPE html>
@@ -61,7 +66,13 @@ if($rights>3)
       <div class="container-fluid">
         <div class="d-flex align-items-center">
           <div class="site-logo mr-auto w-25"><a href="">IMS Portal</a></div>
-
+          <div class="ml-auto w-25">
+            <form class="" method="post" action="">
+              <div class="form-group">
+                <input type="submit" class="btn btn-pill btn-danger" value="Logout" name="logout">
+              </div>
+            </form>
+          </div>
 <!--
           <div class="ml-auto w-25">
             <nav class="site-navigation position-relative text-right" role="navigation">
@@ -124,7 +135,7 @@ if($rights>3)
                             //echo "<td><a href='shop.php?shop=$shop&deptno=$deptno'>".$row['shopname']."</a></td>";
                             echo "<td>
                             <form action='/ICFP2/shop.php' method='post'>
-                            <input type='hidden' value=$shop name=shop>
+                            <input type='hidden' value='".$row['shopname']."' name=shop>
                             <input type='hidden' value=$deptno name=deptno>
                             <input type='submit' class='btn btn-primary btn-pill' value='".$row['shopname']."' name='SHOP'>
                             </form></td>";

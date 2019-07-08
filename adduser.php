@@ -6,20 +6,20 @@ if(!isset($_SESSION['sess_rights']) || (time()-$_SESSION['last'])>600)
   header("Location: login.php");
 }
 $_SESSION['last']=time();
-$rights=$_SESSION['sess_rights'];
+$right=$_SESSION['sess_rights'];
 if($rights>1)
 {
   switch ($rights) {
       case 2:
-        $_SESSION['sess_rights']=$rights;
+        $_SESSION['sess_rights']=$right;
         header("Location: hod.php");
         break;
       case 3:
-        $_SESSION['sess_rights']=$rights;
+        $_SESSION['sess_rights']=$right;
         header("Location: dhod.php");
         break;
       case 4:
-        $_SESSION['sess_rights']=$rights;
+        $_SESSION['sess_rights']=$right;
         header("Location: shop.php");
         break;      
       default:
@@ -48,9 +48,14 @@ else
       $query=mysqli_query($con,"INSERT INTO user VALUES ('".$deptno."','".$username."','".$pwd."','".$rights."','".$email."','".$mobile."')");
       if($query===TRUE)
       {
-        if($rights==2)
+        if($rights==4 && isset($_POST['senior']))
         {
-
+          $senior=$_POST['senior'];
+          $query1=mysqli_query($con,"INSERT INTO shop VALUES ('".$deptno."','".$senior."','".$username."')");
+          if($query2===TRUE)
+          {
+            echo "Done";
+          }
         }
         echo "<script type='text/javascript'>alert('Submitted successfully!')</script>";
         //header("Location: adduser.php");
@@ -65,9 +70,15 @@ else
     }
     if($_POST['CANCEL'])
     {
+      $_SESSION['rights']=$rights;
       header("Location: admin.php");
     }
   }
+}
+if($_POST['logout'])
+{
+  session_destroy();
+  header("Location: login.php");
 }
 ?>
 
@@ -118,6 +129,13 @@ else
       <div class="container-fluid">
         <div class="d-flex align-items-center">
           <div class="site-logo mr-auto w-25"><a href="">IMS Portal</a></div>
+          <div class="ml-auto w-25">
+            <form class="" method="post" action="">
+              <div class="form-group">
+                <input type="submit" class="btn btn-pill btn-danger" value="Logout" name="logout">
+              </div>
+            </form>
+          </div>
 
 <!--
           <div class="ml-auto w-25">
@@ -157,18 +175,21 @@ else
                     <div class="form-group">
                       <input type="password" class="form-control" placeholder="Password" name="pass" method="post">
                     </div>
-					<div class="form-group">
+					          <div class="form-group">
                       <input type="number" class="form-control" placeholder="Mobile Number" name="mobile" method="post">
                     </div>
                     <div class="form-group">
                       <input type="email" class="form-control" placeholder="Email" name="email" method="post">
                     </div>
-					<div class="form-group">
+					          <div class="form-group">
                       <input type="text" class="form-control" placeholder="Department Name" name="deptname" method="post">
                     </div>
                     <div class="form-group">
                       <input type="number" class="form-control" placeholder="Priveleges" name="rights" method="post">
-                    </div>					  
+                    </div>
+                    <div class="form-group">
+                      <label>If user is shop the enter senior deputy head user's name otherwise leave balnk</label>
+                      <input type="text" class="form-control" placeholder="Senior Deputy" name="senior" method="post"></div>				  
                     <div class="form-group">
                       <input type="submit" class="btn btn-primary btn-pill" value="Add user" name="SUBMIT">
                       <input type="submit" class="btn btn-secondary btm-pill" value="Cancel" name="CANCEL">

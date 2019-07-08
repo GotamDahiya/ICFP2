@@ -6,6 +6,11 @@ if(!isset($_SESSION['sess_rights']) || (time()-$_SESSION['last'])>600)
     header("Location: login.php");
 }
 $_SESSION['last']=time();
+if($_POST['logout'])
+{
+  session_destroy();
+  header("Location: login.php");
+}
 ?>
 
 <!DOCTYPE html>
@@ -70,6 +75,13 @@ $_SESSION['last']=time();
       <div class="container-fluid">
         <div class="d-flex align-items-center">
           <div class="site-logo mr-auto w-25"><a href="">IMS Portal</a></div>
+          <div class="ml-auto w-25">
+            <form class="" method="post" action="">
+              <div class="form-group">
+                <input type="submit" class="btn btn-pill btn-danger" value="Logout" name="logout">
+              </div>
+            </form>
+          </div>
 
 <!--
           <div class="ml-auto w-25">
@@ -103,53 +115,45 @@ $_SESSION['last']=time();
                 <div class="col-lg-5 ml-auto" data-aos="fade-up" data-aos-delay="500">
                   <form action="" method="post" enctype = "multipart/form-data" class="form-box">
                     <?php
-                        //echo "hi </br>";
-
-                    if(isset($_POST['btn'])){
-
-                        $file = $_FILES['myfile'];
-                        $filename = $_FILES['myfile']['tmp_name'];
-                        //echo $filename;
-                        
-                        $mysqli=mysqli_connect('localhost','root','Orion@1234','project2');
-                        
-                        if (!$mysqli)
-                            die("Can't connect to MySQL: ".mysqli_connect_error());
-                        
-                        $stmt = $mysqli->prepare("INSERT INTO document VALUES(?,?,?,?)");
-                        $null = NULL;
-                        $stmt->bind_param("issb",$deptno,$docname,$shop,$null);
+                      //echo "hi </br>";
+                      if(isset($_POST['btn']))
+                      {
+                        $con=mysqli_connect("localhost","root","Orion@1234","project2");
+                        $file=$_FILES['myfile']['tmp_name'];
                         $docname=$_POST['docname'];
-                        $deptno=$_SESSION['sess_deptno'];
                         $shop=$_SESSION['sess_shop'];
-                        $stmt->send_long_data(0,$deptno);
-                        $stmt->send_long_data(1,$docname);
-                        $stmt->send_long_data(2,$shop);
-                        $stmt->send_long_data(3, file_get_contents($filename));
-
-                        // $query=mysqli_query($con,"INSERT INTO document VALUES ('".$deptno."','".$docname."','".$shop."','".file_get_contents($filename)."')");
-                        
-                        echo " before exec ";
-                       
-                        $stmt->execute();
-                        
-                        echo " </br> done with execution ";
-                        // if($query===TRUE)
-                        // {
-                        //     echo "<script type='text/javascript'>alert('Submitted successfully!')</script>";
-                        // }
-                        // else
-                        // {
-                        //     echo "<script type='text/javascript'>alert('Not Submitted!')</script>";
-                        // }
-                    }
+                        $deptno=$_SESSION['sess_deptno'];
+                        $destination='/ICFP2/uploads/' . $docname;
+                        if(move_uploaded_file($file,$destination))
+                        {
+                          $query=mysqli_query($con,"INSERT INTO documents VALUES ('".$deptno."','".$docname."','".$shop."')");
+                          if($query)
+                          {
+                            echo "<script type='text/javascript'>alert('Submitted Successfully!')</script>";
+                          }
+                          else
+                          {
+                            echo "<script type='text/javascrip't>alert('Not submitted!')</script>";
+                          }
+                        }
+                        else
+                        {
+                            echo "<script type='text/javascript'>alert('Not uploaded!')</script>";
+                        }
+                      }
                     ?>
                     <input type="file" class="btn btn-pill" name ='myfile'/>
-                    <button class="btn btn-primary btn-pill" name="btn">Upload File</button>
-                    <br></br>
+                    <!-- <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Shop Name" name="shop">
+                    </div>
+                    <div class="form-group">
+                        <input type="text" class="form-control" placeholder="Department Number" name="deptno">
+                    </div> -->
                     <div class="form-group">
                         <input type="text" class="form-control" placeholder="Document Name" name="docname">
                     </div>
+                    <button class="btn btn-primary btn-pill" name="btn">Upload File</button>
+                    <br></br>
                   </form>
               </div>
                 </div>

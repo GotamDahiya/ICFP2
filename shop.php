@@ -11,9 +11,14 @@ $rights=$_SESSION['sess_rights'];
 if($_POST['UPLOAD'])
 {
 	$_SESSION['sess_rights']=$rights;
-	$_SESSION['sess_deptno']=$_GET['deptno'];
-	$_SESSION['sess_shop']=$_GET['shop'];
+	$_SESSION['sess_deptno']=$_POST['deptno'];
+	$_SESSION['sess_shop']=$_POST['shop'];
 	header("Location: upload.php");
+}
+if($_POST['logout'])
+{
+  session_destroy();
+  header("Location: login.php");
 }
 ?>
 
@@ -64,6 +69,13 @@ if($_POST['UPLOAD'])
       <div class="container-fluid">
         <div class="d-flex align-items-center">
           <div class="site-logo mr-auto w-25"><a href="">IMS Portal</a></div>
+          <div class="ml-auto w-25">
+            <form class="" method="post" action="">
+              <div class="form-group">
+                <input type="submit" class="btn btn-pill btn-danger" value="Logout" name="logout">
+              </div>
+            </form>
+          </div>
 
 <!--
           <div class="ml-auto w-25">
@@ -89,8 +101,7 @@ if($_POST['UPLOAD'])
             <div class="col-12">
               <div class="row align-items-center">
                 <div class="col-lg-6 mb-4">
-                  <!-- <h1>Shop Page</h1> -->
-                  <?php echo $_POST['shop']; ?>
+                  <h1>Shop Page</h1>
                   <p>List of Documents</p>
                 </div>
                 <div class="table-responsive">
@@ -108,21 +119,25 @@ if($_POST['UPLOAD'])
                         	$shop=$_POST['shop'];
                         	$deptno=$_POST['deptno'];
                         	//echo "A";
+                          //echo " ".$shop." ".$deptno." ";
                         }
                         else
                         {
                         	$shop=$_SESSION['sess_shop'];
                         	$deptno=$_SESSION['sess_deptno'];
+                          //echo "B";
+                          //echo " ".$shop." ".$deptno." ";
                         }
                         $con=mysqli_connect("localhost","root","Orion@1234","project2");
-                        $query=mysqli_query($con,"SELECT * FROM document WHERE shop='".$shop."' AND deptno='".$deptno."'");
+                        $query=mysqli_query($con,"SELECT * FROM documents WHERE shop='".$shop."' AND deptno='".$deptno."'");
                         $numrows=mysqli_num_rows($query);
                         if($numrows>0)
                         {
                           while($row=mysqli_fetch_assoc($query))
                           {
                             echo "<td>".$row['docname']."</td>";
-                            echo "<td>".$row['doc']."</td>";
+                            $imageUrl ='/var/www/html/ICFP2/uploads/'.$row['docname'];
+                            echo "<td>".$imageUrl."</td>";
                             echo "</tr>";
                           }
                         }

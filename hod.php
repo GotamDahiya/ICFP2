@@ -24,6 +24,11 @@
   // echo "a ";
   // echo $_SESSION['sess_deptno'];
   // echo "b ";
+  if($_POST['logout'])
+  {
+    session_destroy();
+    header("Location: login.php");
+  }
 ?>
 <?php session_start(); ?>
 <!DOCTYPE html>
@@ -73,7 +78,13 @@
       <div class="container-fluid">
         <div class="d-flex align-items-center">
           <div class="site-logo mr-auto w-25"><a href="">IMS Portal</a></div>
-
+          <div class="ml-auto w-25">
+            <form class="" method="post" action="">
+              <div class="form-group">
+                <input type="submit" class="btn btn-pill btn-danger" value="Logout" name="logout">
+              </div>
+            </form>
+          </div>
 <!--
           <div class="ml-auto w-25">
             <nav class="site-navigation position-relative text-right" role="navigation">
@@ -121,7 +132,7 @@
                         else
                         {
                           $deptno=$_SESSION['sess_deptno'];
-                          echo "B";
+                          //echo "B";
                         }
                         //echo $deptno;
                         $con=mysqli_connect("localhost","root","Orion@1234","project2");
