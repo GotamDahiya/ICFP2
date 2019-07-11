@@ -8,11 +8,28 @@ if(!isset($_SESSION['sess_rights'])|| (time()-$_SESSION['last'])>600)
 $_SESSION['last']=time();
 $rights=$_SESSION['sess_rights'];
 
+$test="ABC";
+if($_POST['SHOP'])
+{
+  $_SESSION['sess_shop']=$_POST['shop'];
+  $_SESSION['sess_deptno']=$_POST['deptno'];
+  //echo "A";
+  //echo " ".$shop." ".$deptno." ";
+}
+else
+{
+  $shop=$_SESSION['sess_shop'];
+  $deptno=$_SESSION['sess_deptno'];
+  //echo "B";
+  // echo " ".$shop." ".$deptno." ";
+}
+//echo " ".$shop." ".$deptno." ";
 if($_POST['UPLOAD'])
 {
 	$_SESSION['sess_rights']=$rights;
-	$_SESSION['sess_deptno']=$_POST['deptno'];
-	$_SESSION['sess_shop']=$_POST['shop'];
+  $_SESSION['sess_test']=$test;
+	$_SESSION['sess_deptno']=$deptno;
+	$_SESSION['sess_shop']=$shop;
 	header("Location: upload.php");
 }
 if($_POST['logout'])
@@ -101,7 +118,7 @@ if($_POST['logout'])
             <div class="col-12">
               <div class="row align-items-center">
                 <div class="col-lg-6 mb-4">
-                  <h1>Shop Page</h1>
+                  <h1><?php echo $shop; ?> Page</h1>
                   <p>List of Documents</p>
                 </div>
                 <div class="table-responsive">
@@ -136,8 +153,10 @@ if($_POST['logout'])
                           while($row=mysqli_fetch_assoc($query))
                           {
                             echo "<td>".$row['docname']."</td>";
-                            $imageUrl ='/var/www/html/ICFP2/uploads/'.$row['docname'];
-                            echo "<td>".$imageUrl."</td>";
+                            $files_field=$row['filename'];
+                            $files_show="uploads/$files_field";
+                            echo "<td><a href='$files_show'>".$files_field."</a></td>";
+                            //echo "<td>".$row['docname']."</td>";
                             echo "</tr>";
                           }
                         }
@@ -149,7 +168,7 @@ if($_POST['logout'])
                     </tbody>                    
                   </table>
                 </div>
-            	<form action="" method="post" class="form-box">
+            	<form action="" method="post" class="">
             		<div class="form-group">
             			<input type="submit" class="btn btn-primary btn-pill" value="Upload" name="UPLOAD">
             		</div>

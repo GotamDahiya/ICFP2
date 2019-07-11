@@ -11,7 +11,10 @@ if($_POST['logout'])
   session_destroy();
   header("Location: login.php");
 }
+  $shop=$_SESSION['sess_shop'];
+  //echo " ".$_SESSION['sess_shop']." ".$_SESSION['sess_deptno']." ";
 ?>
+
 
 <!DOCTYPE html>
 <html>
@@ -107,8 +110,8 @@ if($_POST['logout'])
             <div class="col-12">
               <div class="row align-items-center">
                 <div class="col-lg-6 mb-4">
-                  <h1  data-aos="fade-up" data-aos-delay="100">Welcome to IMS Portal</h1>
-                  <p class="mb-4"  data-aos="fade-up" data-aos-delay="200">Log in and access your files.</p>
+                  <h1  data-aos="fade-up" data-aos-delay="100">Welcome to Upload Page</h1>
+                  <p class="mb-4"  data-aos="fade-up" data-aos-delay="200">Please choose which files you want to upload and wite the document name.</p>
 
                 </div>
 
@@ -119,21 +122,26 @@ if($_POST['logout'])
                       if(isset($_POST['btn']))
                       {
                         $con=mysqli_connect("localhost","root","Orion@1234","project2");
+                        $name=$_FILES['myfile']['name'];
                         $file=$_FILES['myfile']['tmp_name'];
                         $docname=$_POST['docname'];
                         $shop=$_SESSION['sess_shop'];
                         $deptno=$_SESSION['sess_deptno'];
-                        $destination='/ICFP2/uploads/' . $docname;
-                        if(move_uploaded_file($file,$destination))
+                        $test=$_SESSION['sess_test'];
+                        $path ="uploads/";
+                        //$path=$path.$name;
+                        //echo $path.$name;
+                        //echo " ".$name." ".$docname." ".$deptno." ".$shop." ".$test." ";
+                        if(move_uploaded_file($file,$path.$name))
                         {
-                          $query=mysqli_query($con,"INSERT INTO documents VALUES ('".$deptno."','".$docname."','".$shop."')");
-                          if($query)
+                          $query=mysqli_query($con,"INSERT INTO documents VALUES ('".$deptno."','".$docname."','".$shop."','".$name."')");
+                          if($query===TRUE)
                           {
                             echo "<script type='text/javascript'>alert('Submitted Successfully!')</script>";
                           }
                           else
                           {
-                            echo "<script type='text/javascrip't>alert('Not submitted!')</script>";
+                            echo "<script type='text/javascript'>alert('Not submitted!')</script>";
                           }
                         }
                         else

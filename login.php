@@ -14,8 +14,8 @@ function test_input($data) {
   {
     if (!$_POST["userid"]) 
     {       
-        $error .= "A username is required.<br>";
-        echo $error;
+        $error .= "A username is required";
+        echo "<script type='text/javascript'>alert('".$error."')</script>";
     }
     else
     {
@@ -23,8 +23,8 @@ function test_input($data) {
     }
     if (!$_POST["pwd"]) 
     {   
-       $error .= "A password is required.<br>";
-       echo $error;   
+       $error .= "A password is required";
+       echo "<script type='text/javascript'>alert('".$error."')</script>";   
     }
     else
     {

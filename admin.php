@@ -162,7 +162,7 @@
                 		</tbody>                		
                 	</table>
                 </div>
-                <form action="" method="post" class="form-box">
+                <form action="" method="post" class="">
                   <div class="form-group">
                     <input type="submit" class="btn btn-primary btn-pill" value="Add User" name="ADD">
                     <input type="submit" class="btn btn-danger btn-pill" value="Delete User" name="CANCEL">
